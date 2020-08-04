@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="ua-windows ua-webkit" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <style class="vjs-styles-defaults">
+        .video-js {
+            width: 300px;
+            height: 150px;
+        }
+
+        .vjs-fluid {
+            padding-top: 56.25%
+        }
+    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta name="referrer" content="always" />
+    <meta name="google-site-verification" content="ok0wCgT20tBBgo9_zat2iAcimtN4Ftf5ccsh092Xeyw" />
+    <title>评论</title>
+    <link rel="stylesheet" href="https://img3.doubanio.com/f/olivia/136d9149a9dbd56c409728495cdf185d2fee6b4c/css/discussion/editor_n.css" />
+    <!--    <link rel="shortcut icon" href="https://img3.doubanio.com/favicon.ico" type="image/x-icon" />-->
+    <script type="text/javascript">
+        function submits() {
+            var form = document.getElementById("discussion-editor-form");
+            form.submit();
+        }
+    </script>
+
+    <style>
+        .comment {
+            width: 700px;
+            margin: 200px auto 0px auto;
+        }
+
+        .comment-text-area {
+            width: 700px;
+        }
+
+        .text-area {
+            width: 680px;
+            max-width: 680px;
+            max-height: 150px;
+            border: 5px #ebebeb solid;
+            height: 150px;
+            overflow: hidden;
+            padding: 5px 5px 5px 5px;
+            color: #999999;
+        }
+
+        .text-area-input-length {
+            font-size: 12px;
+            line-height: 30px;
+        }
+
+        .text-area-input-length span {
+            margin: 0px 5px 0px 5px;
+            color: red;
+        }
+
+        .text-area-bottom {
+            text-align: right;
+            margin: 5px 0px 0px 0px;
+            float: right;
+            padding: 0px 0px 0px 0px;
+        }
+
+        .text-area-bottom a {
+            border: #ebebeb 2px solid;
+            padding: 10px 20px 10px 20px;
+            text-decoration: none;
+            color: #000000;
+            font-size: 14px;
+        }
+
+        .text-area-star {
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .text-area-star label {
+            float: left;
+            line-height: 35px;
+            height: 35px;
+            font-size: 12px;
+            margin: 0px 10px 10px 0px;
+            padding: 0px 5px 0px 5px;
+            cursor: pointer;
+            border: 1px solid #ebebeb;
+        }
+
+        .red {
+            color: red;
+            border: 1px solid red !important;
+        }
+
+        .text-area-star label input {
+            filter: alpha(opacity=0);
+            -moz-opacity: 0;
+            opacity: 0;
+            position: absolute;
+        }
+
+        .text-area-star label span {
+            padding: 10px 10px 10px 10px;
+            position: relative;
+        }
+    </style>
+
+</head>
+<body>
+<script type="text/javascript">var _body_start = new Date();</script>
+<script type="text/javascript">
+    $(function () {
+
+        $('.text-area-input').click(function () {
+            if ($(this).val() == '请输入评论内容......') {
+                $(this).css({
+                    color: '#000000'
+                }).val('')
+            }
+        });
+
+        //离开的时候
+        $('.text-area-input').blur(function () {
+            var iNum = $(this).val().length;
+            var fixedLength = 1000;//固定长度
+            if (iNum < fixedLength) {
+                $('.text-area-input-length span').html(fixedLength - iNum);
+            } else {
+                $(this).val($(this).val().substr(0, fixedLength - 1));//截取长度
+                $('.text-area-input-length span').html(iNum - fixedLength);
+            }
+        });
+
+        //按下的时候
+        $('.text-area-input').keydown(function () {
+            var iNum = $(this).val().length;
+            var fixedLength = 1000;//固定长度
+            if (iNum < fixedLength) {
+                $('.text-area-input-length span').html(fixedLength - iNum);
+            } else {
+                $(this).val($(this).val().substr(0, fixedLength - 1));//截取长度
+                $('.text-area-input-length span').html(iNum - fixedLength);
+            }
+        });
+
+
+        $('.text-area-bottom a').click(function () {
+            var star = $('input[name=star]:checked').val();
+            var content = $('textarea[name=content]').val();
+            //alert(content);
+            var dlform = document.createElement('form');
+            dlform.style = "display:none;";
+            dlform.method = 'post';
+            dlform.action = '/comment/submit';
+
+            var contentInput = document.createElement('input');
+            contentInput.type = 'hidden';
+            contentInput.name = 'content';
+            contentInput.value = content;
+            dlform.appendChild(contentInput);
+
+            var starInput = document.createElement('input');
+            starInput.type = 'hidden';
+            starInput.name = 'mark';
+            starInput.value = star;
+            dlform.appendChild(starInput);
+
+            var id = document.createElement('input');
+            id.type = 'hidden';
+            id.name = 'id';
+            id.value = ""+[[${id}]];
+            dlform.appendChild(id);
+
+            document.body.appendChild(dlform);
+            dlform.submit();
+            document.body.removeChild(dlform);
+
+
+        });
+
+        $('.text-area-star label').click(function () {
+            var labelLength = $('.text-area-star label').length;
+            for (var i = 0; i < labelLength; i++) {
+                if (this == $('.text-area-star label').get(i)) {
+                    $('.text-area-star label').eq(i).addClass('red');
+                } else {
+                    $('.text-area-star label').eq(i).removeClass('red');
+                }
+            }
+        });
+
+
+    });
+</script>
+
+<div class="nav">
+    <div class="nav-inner">
+        <div class="">
+            <a href="https://movie.douban.com/subject/27186348/">SHU影评</a>
+        </div>
+        <h1 class="nav-label">发布讨论</h1>
+        <div id="nav-top-actions" class="nav-actions">
+        </div>
+    </div>
+</div>
+
+<div class="comment">
+    <div class="comment-level"></div>
+    <div class="comment-text-area">
+        <div class="text-area-star">
+            <label><input type="radio" name="star" value="1"/><span>一星</span></label>
+            <label><input type="radio" name="star" value="2"/><span>二星</span></label>
+            <label><input type="radio" name="star" value="3"/><span>三星</span></label>
+            <label><input type="radio" name="star" value="4"/><span>四星</span></label>
+            <label class="red"><input type="radio" checked name="star" value="5"/><span>五星</span></label>
+        </div>
+        <div><textarea class="text-area text-area-input" name="content">请输入评论内容......</textarea></div>
+    <div class="text-area-input-length">您还可输入<span>1000</span>个字</div>
+    <div class="text-area-bottom"><a href="javascript:void(0);">提交评论</a></div>
+    </div>
+</div>
+
+</body>
+</html>
